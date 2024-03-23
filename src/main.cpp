@@ -25,9 +25,11 @@
 #define SCL 6
 #define SDA 7
 
+#define DEVICE_ID 0x01
+
 // Low power setup.
 //#define USE_SERIAL
-#define SLEEP_TIME_MS 30000 // 5 mins
+#define SLEEP_TIME_MS 300000 // 5 mins
 static TimerEvent_t wakeUp;
 uint8_t lowpower = 0;
 
@@ -68,7 +70,9 @@ void onWakeUp() {
 
 void setup()
 {
+  #ifdef USE_SERIAL
   Serial.begin(115200);
+  #endif
   Wire.begin();
   pinMode(PIN_VBAT, INPUT);
 
@@ -117,7 +121,7 @@ void loop()
 
   // Build a string.
   char buff[100];
-  int size = sprintf(buff, "v%dt%.1fp%.1fh%.1f", vbat, temperature, pressure, humidity);
+  int size = sprintf(buff, "%dv%dt%.1fp%.1fh%.1f", DEVICE_ID, vbat, temperature, pressure, humidity);
   buff[size] = '\0';
   serialPrintLn(buff);
 
