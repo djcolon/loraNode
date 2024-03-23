@@ -28,8 +28,8 @@
 #define DEVICE_ID 0x01
 
 // Low power setup.
-//#define USE_SERIAL
-#define SLEEP_TIME_MS 300000 // 5 mins
+#define USE_SERIAL
+#define SLEEP_TIME_MS 60000 // 1 min
 static TimerEvent_t wakeUp;
 uint8_t lowpower = 0;
 
@@ -111,8 +111,9 @@ void loop()
   if(lowpower){
     lowPowerHandler();
   }
-  // Get the battery voltage (according to datasheet).
-  int vbat = 2*analogRead(PIN_VBAT);
+  // Get the battery voltage (according to datasheet multiplier is 2,
+  // but this is more accurate).
+  int vbat = analogRead(PIN_VBAT)*0.55;
 
   // And BME data.
   float temperature = bme.readTemperature();
